@@ -7,6 +7,11 @@ require('dotenv').config();
 const app = express();
 app.use(express.json());
 
+// Route welcome
+app.get('/', (req, res) => {
+  res.send('Welcome to ChicNotes API!');
+});
+
 app.use('/auth', userRoutes);
 app.use('/note', noteRoutes);
 
