@@ -11,7 +11,10 @@ const Note = sequelize.define('Note', {
     type: DataTypes.TEXT,
     allowNull: false
   }
+}, {
+  tableName: 'notes' 
 });
 
 Note.belongsTo(User, { foreignKey: 'userId' });
+
 module.exports = Note;
