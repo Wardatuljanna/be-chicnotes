@@ -15,6 +15,8 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: false
   }
+}, {
+  tableName: 'users' // Menentukan nama tabel yang digunakan di database
 });
 
 module.exports = User;
