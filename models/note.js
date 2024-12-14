@@ -15,9 +15,6 @@ const Note = sequelize.define('Note', {
   tableName: 'notes' 
 });
 
-// Menambahkan relasi ke User
 Note.belongsTo(User, { foreignKey: 'userId' });
 
-
 module.exports = Note;
-
