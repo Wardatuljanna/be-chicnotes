@@ -6,23 +6,23 @@ exports.signup = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    // Validasi kolom kosong
+    // Validate empty fields
     if (!name || !email || !password) {
-      return res.status(400).json({ message: 'Email dan password harus diisi' });
+      return res.status(400).json({ message: 'Email and password are required' });
     }
 
-    // Email sudah ada
+    // Check if email already exists
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
-      return res.status(409).json({ message: 'Email sudah digunakan' });
+      return res.status(409).json({ message: 'Email is already in use' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({ name, email, password: hashedPassword });
 
-    res.status(201).json({ message: 'Pengguna berhasil dibuat', user });
+    res.status(201).json({ message: 'User created successfully', user });
   } catch (err) {
-    res.status(500).json({ error: 'Terjadi kesalahan pada server', details: err.message });
+    res.status(500).json({ error: 'Server error occurred', details: err.message });
   }
 };
 
@@ -30,25 +30,25 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Validasi kolom kosong
+    // Validate empty fields
     if (!email || !password) {
-      return res.status(400).json({ message: 'Email dan password harus diisi' });
+      return res.status(400).json({ message: 'Email and password are required' });
     }
 
     const user = await User.findOne({ where: { email } });
     if (!user) {
-      return res.status(404).json({ message: 'Pengguna tidak ditemukan' });
+      return res.status(404).json({ message: 'User not found' });
     }
 
-    // Cek password dan kirim pesan error spesifik jika salah
+    // Check password and send specific error message if incorrect
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(401).json({ message: 'Password salah' });
+      return res.status(401).json({ message: 'Incorrect password' });
     }
 
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.status(200).json({ message: 'Login berhasil', token });
+    res.status(200).json({ message: 'Login successful', token });
   } catch (err) {
-    res.status(500).json({ error: 'Terjadi kesalahan pada server', details: err.message });
+    res.status(500).json({ error: 'Server error occurred', details: err.message });
   }
 };
